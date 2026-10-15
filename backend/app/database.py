@@ -10,8 +10,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 load_dotenv(PROJECT_ROOT / ".env")
 
 password = os.getenv("POSTGRES_PASSWORD")
-if not password:
-    raise RuntimeError("POSTGRES_PASSWORD is missing from the root .env file")
+
 
 DATABASE_URL = URL.create(
     drivername="postgresql+psycopg",
