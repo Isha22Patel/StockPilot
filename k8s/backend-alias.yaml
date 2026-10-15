@@ -4,6 +4,8 @@ kind: Service
 metadata:
   name: backend
   namespace: stockpilot
+  annotations:
+    gitops-demo: "enabled"
 spec:
   type: ClusterIP
   selector:
