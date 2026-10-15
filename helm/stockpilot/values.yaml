@@ -1,0 +1,7 @@
+backend:
+  image: ghcr.io/isha22patel/stockpilot/backend:d96564a
+  replicas: 1
+
+frontend:
+  image: ghcr.io/isha22patel/stockpilot/frontend:d96564a
+  replicas: 1

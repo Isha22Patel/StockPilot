@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stockpilot-backend
+  namespace: stockpilot
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      app: stockpilot-backend
+  template:
+    metadata:
+      labels:
+        app: stockpilot-backend
+    spec:
+      containers:
+        - name: backend
+          image: {{ .Values.backend.image }}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POSTGRES_USER
+              value: stockpilot
+            - name: POSTGRES_DB
+              value: stockpilot_db
+            - name: POSTGRES_HOST
+              value: stockpilot-postgres
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: stockpilot-db-secret
+                  key: POSTGRES_PASSWORD
+          readinessProbe:
+            httpGet:
+              path: /health/db
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: stockpilot-backend
+  namespace: stockpilot
+spec:
+  type: ClusterIP
+  selector:
+    app: stockpilot-backend
+  ports:
+    - port: 8000
+      targetPort: 8000
