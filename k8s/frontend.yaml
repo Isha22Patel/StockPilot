@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/isha22patel/stockpilot/frontend:latest
+          image: ghcr.io/isha22patel/stockpilot/frontend:d96564a
           imagePullPolicy: Always
           ports:
             - containerPort: 80

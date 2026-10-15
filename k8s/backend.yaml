@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ghcr.io/isha22patel/stockpilot/backend:latest
+          image: ghcr.io/isha22patel/stockpilot/backend:d96564a
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
