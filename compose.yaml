@@ -1,0 +1,53 @@
+
+services:
+  db:
+    image: postgres:17
+    container_name: stockpilot-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: stockpilot
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: stockpilot_db
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - stockpilot_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stockpilot -d stockpilot_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: stockpilot-backend
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: stockpilot
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: stockpilot_db
+      POSTGRES_HOST: db
+      POSTGRES_PORT: "5432"
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: http://localhost:8000
+    container_name: stockpilot-frontend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  stockpilot_data:
+    name: stockpilot_stockpilot_data
+
