@@ -96,6 +96,7 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -103,16 +104,34 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push Backend Image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          IMAGE_NAME: ghcr.io/${{ github.repository }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}"
+          IMAGE_NAME="${IMAGE_NAME,,}"
+          SHORT_SHA="${IMAGE_TAG:0:7}"
+
+          docker tag stockpilot-backend:ci "$IMAGE_NAME/backend:$SHORT_SHA"
           docker tag stockpilot-backend:ci "$IMAGE_NAME/backend:latest"
+
+          docker push "$IMAGE_NAME/backend:$SHORT_SHA"
           docker push "$IMAGE_NAME/backend:latest"
 
       - name: Push Frontend Image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          IMAGE_NAME: ghcr.io/${{ github.repository }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}"
+          IMAGE_NAME="${IMAGE_NAME,,}"
+          SHORT_SHA="${IMAGE_TAG:0:7}"
+
+          docker tag stockpilot-frontend:ci "$IMAGE_NAME/frontend:$SHORT_SHA"
           docker tag stockpilot-frontend:ci "$IMAGE_NAME/frontend:latest"
-          docker push "$IMAGE_NAME/frontend:latest"   
+
+          docker push "$IMAGE_NAME/frontend:$SHORT_SHA"
+          docker push "$IMAGE_NAME/frontend:latest"
       
 
   secret-scan:
