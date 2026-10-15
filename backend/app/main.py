@@ -1,4 +1,4 @@
-
+from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
@@ -29,6 +29,7 @@ app.add_middleware(
 
 app.include_router(product_router)
 
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
 @app.get("/")
 def root():
