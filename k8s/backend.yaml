@@ -59,10 +59,13 @@ kind: Service
 metadata:
   name: stockpilot-backend
   namespace: stockpilot
+  labels:
+    app: stockpilot-backend
 spec:
   type: ClusterIP
   selector:
     app: stockpilot-backend
   ports:
-    - port: 8000
+    - name: metrics
+      port: 8000
       targetPort: 8000
