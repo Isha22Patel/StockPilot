@@ -44,7 +44,8 @@ jobs:
   docker-build:
     name: Build Docker Images
     runs-on: ubuntu-latest
-needs: [backend-tests, secret-scan]
+    needs: [backend-tests, secret-scan]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
