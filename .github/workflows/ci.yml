@@ -72,7 +72,7 @@ jobs:
             VITE_API_BASE_URL=http://localhost:8000
 
       - name: Scan Backend Image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           image-ref: stockpilot-backend:ci
           format: table
@@ -82,7 +82,7 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Scan Frontend Image
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           image-ref: stockpilot-frontend:ci
           format: table
