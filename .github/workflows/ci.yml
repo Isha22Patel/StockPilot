@@ -31,5 +31,32 @@ jobs:
       - name: Run backend tests
         env:
           PYTHONPATH: backend
-        run: |
-          python -m pytest backend/tests -v
+        run: python -m pytest backend/tests -v
+
+  docker-build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    needs: backend-tests
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Backend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: false
+          tags: stockpilot-backend:ci
+
+      - name: Build Frontend Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: false
+          tags: stockpilot-frontend:ci
+          build-args: |
+            VITE_API_BASE_URL=http://localhost:8000
