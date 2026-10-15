@@ -7,6 +7,10 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions:
+  contents: read
+  packages: write    
+
 jobs:
   backend-tests:
     name: Backend Tests
@@ -90,6 +94,25 @@ jobs:
           ignore-unfixed: true
           vuln-type: os,library
           severity: CRITICAL,HIGH
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Backend Image
+        run: |
+          IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker tag stockpilot-backend:ci "$IMAGE_NAME/backend:latest"
+          docker push "$IMAGE_NAME/backend:latest"
+
+      - name: Push Frontend Image
+        run: |
+          IMAGE_NAME="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker tag stockpilot-frontend:ci "$IMAGE_NAME/frontend:latest"
+          docker push "$IMAGE_NAME/frontend:latest"   
       
 
   secret-scan:
