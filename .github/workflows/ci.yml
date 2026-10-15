@@ -38,6 +38,9 @@ jobs:
           PYTHONPATH: backend
         run: python -m pytest backend/tests -v
 
+
+
+
   docker-build:
     name: Build Docker Images
     runs-on: ubuntu-latest
@@ -65,3 +68,18 @@ jobs:
           tags: stockpilot-frontend:ci
           build-args: |
             VITE_API_BASE_URL=http://localhost:8000
+
+  secret-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan repository for secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
