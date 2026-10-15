@@ -58,6 +58,7 @@ jobs:
         with:
           context: ./backend
           push: false
+          load: true
           tags: stockpilot-backend:ci
 
       - name: Build Frontend Image
@@ -65,9 +66,31 @@ jobs:
         with:
           context: ./frontend
           push: false
+          load: true
           tags: stockpilot-frontend:ci
           build-args: |
             VITE_API_BASE_URL=http://localhost:8000
+
+      - name: Scan Backend Image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: stockpilot-backend:ci
+          format: table
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+
+      - name: Scan Frontend Image
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: stockpilot-frontend:ci
+          format: table
+          exit-code: "1"
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+      
 
   secret-scan:
     name: Secret Scanning
