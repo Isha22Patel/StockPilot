@@ -1,0 +1,7 @@
+
+# Terraform state and plans
+terraform.tfstate
+terraform.tfstate.*
+*.tfplan
+terraform/stockpilot.tfplan
+.terraform/
