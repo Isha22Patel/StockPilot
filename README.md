@@ -279,5 +279,16 @@ Use this section to organize the final assignment evidence:
 **GitHub:** https://github.com/Isha22Patel/StockPilot
 
 ---
+## Demo Video
 
-*StockPilot is an educational cloud-native project demonstrating full-stack development, automated delivery, infrastructure as code, container security, and Kubernetes deployment.*
+Watch the StockPilot DevOps project demo to see the application, CI/CD pipeline, security scanning, Kubernetes deployment, and monitoring dashboard.
+
+**[▶ Watch the StockPilot Demo]https://youtu.be/9BF7-YszmsE
+
+The demonstration covers:
+- Application functionality
+- GitHub Actions CI/CD pipeline
+- Docker image publishing to GitHub Container Registry
+- Kubernetes deployment managed with Helm
+- Prometheus and Grafana monitoring
+---
