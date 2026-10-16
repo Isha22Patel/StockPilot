@@ -38,10 +38,9 @@ metadata:
   name: stockpilot-frontend
   namespace: stockpilot
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: stockpilot-frontend
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 30082
