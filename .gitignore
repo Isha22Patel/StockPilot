@@ -43,3 +43,6 @@ temp/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Downloaded tools
+/eksctl_Linux_amd64.tar.gz

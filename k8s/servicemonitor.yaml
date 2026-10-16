@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: stockpilot-backend
+  namespace: monitoring
+  labels:
+    release: stockpilot-monitoring
+spec:
+  namespaceSelector:
+    matchNames:
+      - stockpilot
+  selector:
+    matchLabels:
+      app: stockpilot-backend
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 15s
